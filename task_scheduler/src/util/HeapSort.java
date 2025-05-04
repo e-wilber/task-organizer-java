@@ -1,3 +1,20 @@
+/** 
+* DATA STRUCTURES: FINAL PROJECT
+* @author E Wilber
+* @version 1.0
+* @since 1.0
+*  
+* OS: Windows11
+* IDE: Eclipse
+*  
+* Copyright : This is my own original work 
+* based on specifications issued by our instructor
+* Academic Honesty: I attest that this is my original work.
+* I have not used unauthorized source code, either modified or
+* unmodified, nor used generative AI as a final draft. 
+* I have not given other fellow student(s) access to my program.
+*/
+
 //SORTING METHOD (Heap Sort Algorithm)
 //sorts hard coded “initial” list of tasks that I would want to do everyday
 //and not have to constantly add one by one
