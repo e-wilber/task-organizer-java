@@ -18,7 +18,8 @@ package app;
 
 import model.Task;
 import scheduler.TaskScheduler;
-
+import util.HeapSort;
+import util.TaskComparator;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
@@ -46,17 +47,29 @@ public class TaskSchedulerSwing {
 * 
 */    
     public void initAndShow() {
-//Bulk-load + heap-sort initial tasks
-        List<Task> initial = List.of(
-            new Task("feed cat", LocalDate.now(), 1),
-            new Task("water plants",  LocalDate.now(), 1),
-            new Task("drink full glass of water", LocalDate.now(), 2)
-        );
-        scheduler.loadAndSortTasks(initial);
 //Building UI
         JFrame frame = new JFrame("TASK SCHEDULER");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 500);
+//Hard-coded daily tasks, sorted by custom heap-sort (HeapSort.java)
+        Task[] initial = {
+            new Task("feed cat",LocalDate.now(), 1),
+            new Task("water plants",LocalDate.now(), 1),
+            new Task("drink full glass of water",LocalDate.now(), 2)
+        };
+        HeapSort.sort(initial, new TaskComparator());
+//Seed the schedulers priority queue
+        for (Task t : initial) {
+            scheduler.addTask(t);
+        }
+//Populate the upcoming list model directly from the sorted array
+        upcomingModel.clear();
+        for (Task t : initial) {
+            upcomingModel.addElement(t);
+        }
+//Clear completed list (empty at startup)
+        completedModel.clear();        
+               
 // Top input panel
         JPanel input = new JPanel();
 //jpanel backgorund color
