@@ -1,3 +1,19 @@
+/** 
+* DATA STRUCTURES: FINAL PROJECT
+* @author E Wilber
+* @version 1.0
+* @since 1.0
+*  
+* OS: Windows11
+* IDE: Eclipse
+*  
+* Copyright : This is my own original work 
+* based on specifications issued by our instructor
+* Academic Honesty: I attest that this is my original work.
+* I have not used unauthorized source code, either modified or
+* unmodified, nor used generative AI as a final draft. 
+* I have not given other fellow student(s) access to my program.
+*/
 package model;
 import java.time.LocalDate;
 
@@ -5,7 +21,13 @@ public class Task {
     private String title;
     private LocalDate dueDate;
     private int difficulty;
-
+/**
+ * class for making the tasks
+ * 
+ * @param title
+ * @param dueDate
+ * @param difficulty
+ */
     public Task(String title, LocalDate dueDate, int difficulty) {
 // Input validation
         if (title == null || title.trim().isEmpty()) {
