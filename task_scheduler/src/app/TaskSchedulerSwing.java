@@ -1,3 +1,19 @@
+/** 
+* DATA STRUCTURES: FINAL PROJECT
+* @author E Wilber
+* @version 1.0
+* @since 1.0
+*  
+* OS: Windows11
+* IDE: Eclipse
+*  
+* Copyright : This is my own original work 
+* based on specifications issued by our instructor
+* Academic Honesty: I attest that this is my original work.
+* I have not used unauthorized source code, either modified or
+* unmodified, nor used generative AI as a final draft. 
+* I have not given other fellow student(s) access to my program.
+*/
 package app;
 
 import model.Task;
@@ -9,19 +25,32 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.IntStream;
-
+/**
+ * Swing based UI for Task Scheduler
+ * 
+ * Provides controls to add, complete, undo and delete tasks,
+ * and displays upcoming vs completed task lists
+ * 
+ */
 public class TaskSchedulerSwing {
 	
     private final TaskScheduler scheduler = new TaskScheduler();
     private final DefaultListModel<Task> upcomingModel  = new DefaultListModel<>();
     private final DefaultListModel<Task> completedModel = new DefaultListModel<>();
 
+    
+/**
+* Builds and shows the main app window
+* 
+* This sets up the input controls, the task lists, and the action buttons
+* 
+*/    
     public void initAndShow() {
 //Bulk-load + heap-sort initial tasks
         List<Task> initial = List.of(
-            new Task("feed cat", LocalDate.of(2025, 5, 10), 1),
-            new Task("water plants", LocalDate.of(2025, 5,  3), 1),
-            new Task("drink full glass of water", LocalDate.of(2025, 5,  5), 2)
+            new Task("feed cat", LocalDate.now(), 1),
+            new Task("water plants",  LocalDate.now(), 1),
+            new Task("drink full glass of water", LocalDate.now(), 2)
         );
         scheduler.loadAndSortTasks(initial);
 //Building UI
@@ -150,7 +179,10 @@ public class TaskSchedulerSwing {
         frame.setVisible(true);
         refresh();
     }
-
+ 
+/**
+* Refreshes the UI list models 
+*/    
     private void refresh() {
         List<Task> up   = scheduler.listUpcoming();
         List<Task> comp = scheduler.listCompleted();
@@ -162,6 +194,11 @@ public class TaskSchedulerSwing {
         comp.forEach(completedModel::addElement);
     }
 
+/**
+* Launches Swing UI on the Event Dispatch Thread
+*
+* @param args ignored
+*/
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new TaskSchedulerSwing().initAndShow());
     }
