@@ -1,7 +1,7 @@
-//SORTING ALGORITHM
+//SORTING METHOD (Heap Sort Algorithm)
 //sorts hard coded “initial” list of tasks that I would want to do everyday
 //and not have to constantly add one by one
-// (tasks added by the “Add” button go straight into the PriorityQueue instead of this)
+// (tasks added by the Add button go straight into the PriorityQueue instead of this)
 package util;
 
 import model.Task;
