@@ -5,15 +5,26 @@ public class Task {
     private String title;
     private LocalDate dueDate;
     private int difficulty;
-    private String description;
 
-    public Task(String title, LocalDate dueDate, int difficulty, String description) {
+    public Task(String title, LocalDate dueDate, int difficulty) {
+// Input validation
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be empty");
+        }
+        if (dueDate == null) {
+            throw new IllegalArgumentException("Due date cannot be empty");
+        }
+        if (dueDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Due date cannot be in the past");
+        }
+        if (difficulty < 1 || difficulty > 5) {
+            throw new IllegalArgumentException("Difficulty must be between 1 and 5");
+        }
         this.title       = title;
         this.dueDate     = dueDate;
         this.difficulty  = difficulty;
-        this.description = description;
     }
-//these must exist 
+//getters
     public LocalDate getDueDate() {
         return dueDate;
     }
@@ -23,17 +34,13 @@ public class Task {
     public String getTitle() {
         return title;
     }
-    public String getDescription() {
-        return description;
-    }
     @Override
     public String toString() {
         return String.format(
-            "%s (due %s, difficulty %d)%s",
+            "%s (due %s, difficulty %d)",
             title,
             dueDate,
-            difficulty,
-            (description.isEmpty() ? "" : " – " + description)
+            difficulty
         );
     }
 }
