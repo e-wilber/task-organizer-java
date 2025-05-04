@@ -1,5 +1,5 @@
+//BINARY HEAP DATA STRUCTURE
 package scheduler;
-
 import model.Task;
 import util.TaskComparator;
 import util.HeapSort;
@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 
 public class TaskScheduler {
-//BINARY HEAP DATA STRUCTURE
     private final PriorityQueue<Task> upcoming;
     private final CompletedList completed;
 
@@ -27,6 +26,10 @@ public class TaskScheduler {
 /** Removing and returning the highest priority (earliest/hardest) task */
     public Task pollNext() {
         return upcoming.poll();
+    }
+/** Remove specific task from upcoming without marking it completed */
+    public boolean removeTask(Task t) {
+        return upcoming.remove(t);
     }
 /** Marking specific task as completed (removing from upcoming, record in completed list) */
     public void complete(Task t) {
