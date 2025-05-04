@@ -19,23 +19,21 @@ public class TaskSchedulerSwing {
     public void initAndShow() {
 //Bulk-load + heap-sort initial tasks
         List<Task> initial = List.of(
-            new Task("feed cat", LocalDate.of(2025, 5, 10), 1, ""),
-            new Task("water plants", LocalDate.of(2025, 5,  3), 1, ""),
-            new Task("drink full glass of water", LocalDate.of(2025, 5,  5), 2, "")
+            new Task("feed cat", LocalDate.of(2025, 5, 10), 1),
+            new Task("water plants", LocalDate.of(2025, 5,  3), 1),
+            new Task("drink full glass of water", LocalDate.of(2025, 5,  5), 2)
         );
         scheduler.loadAndSortTasks(initial);
 //Building UI
         JFrame frame = new JFrame("TASK SCHEDULER");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(700, 400);
+        frame.setSize(800, 500);
 // Top input panel
         JPanel input = new JPanel();
-//JPANEL BACKGROUND COLOR
-        input.setBackground(new Color(180, 190, 210));                 
-         
+//jpanel backgorund color
+        input.setBackground(new Color(180, 190, 210));                          
         JTextField titleField = new JTextField(10);
-
-// Date dropdowns
+// Date dropdown
         String[] monthNames = {
             "Jan","Feb","Mar","Apr","May","Jun",
             "Jul","Aug","Sep","Oct","Nov","Dec"
@@ -50,9 +48,6 @@ public class TaskSchedulerSwing {
 
         JTextField diffField  = new JTextField("1-5", 3);
         JButton addBtn        = new JButton("Add");
-//COLOR OF BUTTONS        
-        addBtn.setBackground(Color.DARK_GRAY);     
-        addBtn.setForeground(Color.WHITE);
 
         input.add(new JLabel("TASK:"));  input.add(titleField);
         input.add(new JLabel("DUE DATE:"));    input.add(monthCb);
@@ -61,25 +56,30 @@ public class TaskSchedulerSwing {
         input.add(new JLabel("DIFFICULTY:"));   input.add(diffField);
         input.add(addBtn);
         input.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-// Center lists & controls
+// Center lists and controls
         JList<Task> upcomingList  = new JList<>(upcomingModel);
         JList<Task> completedList = new JList<>(completedModel);
-//COLOR OF LISTS
+//list colors
         upcomingList.setBackground(new Color(180, 190, 210));
         completedList.setBackground(new Color(180, 190, 210));
-        
+//buttons        
         JButton completeBtn = new JButton("COMPLETED →");
         JButton undoBtn     = new JButton("Undo");
-//BUTTON COLORS        
+        JButton deleteBtn = new JButton("Delete");
+//button colors       
         completeBtn.setBackground(Color.DARK_GRAY);
         completeBtn.setForeground(Color.white);    
 
         undoBtn.setBackground(Color.DARK_GRAY); 
         undoBtn.setForeground(Color.white);               
 
-        JPanel ctrls = new JPanel(new GridLayout(2,1,5,5));
+        deleteBtn.setBackground(Color.DARK_GRAY); 
+        deleteBtn.setForeground(Color.white);
+        
+        JPanel ctrls = new JPanel(new GridLayout(3,1,5,5));
         ctrls.add(completeBtn);
         ctrls.add(undoBtn);
+        ctrls.add(deleteBtn);
 
         JPanel lists = new JPanel(new BorderLayout(10, 10));
         lists.add(new JScrollPane(upcomingList), BorderLayout.WEST);
@@ -97,17 +97,26 @@ public class TaskSchedulerSwing {
                 int day   = (Integer)dayCb.getSelectedItem();
                 int year  = (Integer)yearCb.getSelectedItem();
                 YearMonth ym = YearMonth.of(year, month);
+//input validation for date
                 if (day > ym.lengthOfMonth()) {
                     throw new IllegalArgumentException("Invalid day for " + monthNames[month-1]);
                 }
                 LocalDate due = LocalDate.of(year, month, day);
-
+//input validation for date
+                if (due.isBefore(LocalDate.now())) {
+                    throw new IllegalArgumentException("Due date cant be in the past");
+                }
                 int diff = Integer.parseInt(diffField.getText().trim());
+//input validation for difficulty
+                if (diff < 1 || diff > 5) {
+                    throw new IllegalArgumentException("Difficulty must be between 1 and 5");
+                }
+//input validation for title
                 if (title.isEmpty()) {
                     throw new IllegalArgumentException("Title can't be empty");
                 }
 
-                Task t = new Task(title, due, diff, "");
+                Task t = new Task(title, due, diff);
                 scheduler.addTask(t);
                 refresh();
                 titleField.setText("");
@@ -118,7 +127,7 @@ public class TaskSchedulerSwing {
                     JOptionPane.ERROR_MESSAGE);
             }
         });
-
+//buttons
         completeBtn.addActionListener(e -> {
             Task sel = upcomingList.getSelectedValue();
             if (sel != null) {
@@ -126,10 +135,16 @@ public class TaskSchedulerSwing {
                 refresh();
             }
         });
-
         undoBtn.addActionListener(e -> {
             scheduler.undoLast().ifPresent(x -> refresh());
-        });
+        });        
+        deleteBtn.addActionListener(e -> {
+            Task sel = upcomingList.getSelectedValue();
+            if (sel != null) {
+                scheduler.removeTask(sel);
+                refresh();
+            }
+        });        
 //Finalize and show
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
